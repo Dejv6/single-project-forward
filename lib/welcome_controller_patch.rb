@@ -15,8 +15,8 @@ module ForwardIfSingleWelcomeControllerPatch
     # Adds a rates tab to the user administration page
     def index_with_forward_if_single
       tabs = index_without_forward_if_single
-      @projects = User.current.memberships.where(Project.visible_condition(User.current)).to_a
-      @projects = @projects.map {|i| i.project_id }
+      scope = Project.visible.sorted
+      @projects = scope.active.to_a
       if @projects.length == 1
         redirect_to(:controller => "projects", :action => "show", :id => @projects.first)
         return false
